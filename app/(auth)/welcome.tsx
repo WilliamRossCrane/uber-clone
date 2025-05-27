@@ -34,18 +34,18 @@ const Onboarding = () => {
         onIndexChanged={(index) => setActiveIndex(index)}
       >
         {onboarding.map((item) => (
-          <View key={item.id} className="flex items-center justify-center p-5">
+          <View key={item.id} className="flex items-center p-5 pt-2">
             <Image
               source={item.image}
-              className="w-full h-[300px]"
+              className="w-[280px] h-[220px]"
               resizeMode="contain"
             />
-            <View className="flex flex-row items-center justify-center w-full mt-10">
-              <Text className="text-black text-3xl font-bold mx-10 text-center">
+            <View className="flex flex-row items-center justify-center w-full mt-8">
+              <Text className="text-black text-2xl font-bold mx-10 text-center">
                 {item.title}
               </Text>
             </View>
-            <Text className="text-md font-JakartaSemiBold text-center text-[#858585] mx-10 mt-3">
+            <Text className="text-md font-JakartaSemiBold text-center text-[#858585] mx-10 mt-3 text-1xl">
               {item.description}
             </Text>
           </View>
