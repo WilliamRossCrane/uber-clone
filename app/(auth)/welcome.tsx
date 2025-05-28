@@ -37,7 +37,7 @@ const Onboarding = () => {
           <View key={item.id} className="flex items-center p-5 pt-2">
             <Image
               source={item.image}
-              className="w-[280px] h-[220px]"
+              className="w-[320px] h-[260px]"
               resizeMode="contain"
             />
             <View className="flex flex-row items-center justify-center w-full mt-8">
@@ -45,7 +45,7 @@ const Onboarding = () => {
                 {item.title}
               </Text>
             </View>
-            <Text className="text-md font-JakartaSemiBold text-center text-[#858585] mx-10 mt-3 text-1xl">
+            <Text className="text-xs font-JakartaSemiBold text-center text-[#858585] mx-10 mt-3">
               {item.description}
             </Text>
           </View>
