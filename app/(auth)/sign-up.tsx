@@ -1,7 +1,9 @@
 import { Text, ScrollView, View, Image } from "react-native";
+import { Link } from "expo-router";
 import { images, icons } from "../constants";
 import InputField from "./components/InputField";
 import { useState } from "react";
+import CustomButton from "./components/CustomButton";
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -9,6 +11,8 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+
+  const onSignUpPress = async () => {};
 
   return (
     <ScrollView className="flex-1 bg-white">
@@ -33,7 +37,50 @@ const SignUp = () => {
               })
             }
           />
+          <InputField
+            label="Email"
+            placeholder="Enter your email"
+            icon={icons.email}
+            value={form.email}
+            onChangeText={(value) =>
+              setForm({
+                ...form,
+                email: value,
+              })
+            }
+          />
+          <InputField
+            label="Password"
+            placeholder="Enter your password"
+            icon={icons.lock}
+            secureTextEntry={true}
+            value={form.password}
+            onChangeText={(value) =>
+              setForm({
+                ...form,
+                password: value,
+              })
+            }
+          />
+
+          <CustomButton
+            title="Sign Up"
+            onPress={onSignUpPress}
+            className="mt-6"
+          />
+
+          {/* OAuth */}
+
+          <Link
+            href="/sign-in"
+            className="text-lg text-center text-general-200 mt-10"
+          >
+            <Text>Already have an account?</Text>
+            <Text className="text-primary-500"> Log In</Text>
+          </Link>
         </View>
+
+        {/* Verification Modal*/}
       </View>
     </ScrollView>
   );
