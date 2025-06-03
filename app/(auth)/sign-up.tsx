@@ -4,6 +4,7 @@ import { images, icons } from "../constants";
 import InputField from "./components/InputField";
 import { useState } from "react";
 import CustomButton from "./components/CustomButton";
+import OAuth from "./components/OAuth";
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -69,7 +70,7 @@ const SignUp = () => {
             className="mt-6"
           />
 
-          {/* OAuth */}
+          <OAuth />
 
           <Link
             href="/sign-in"
