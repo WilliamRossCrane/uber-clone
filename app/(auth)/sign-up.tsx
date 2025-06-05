@@ -6,6 +6,7 @@ import { useState } from "react";
 import CustomButton from "./components/CustomButton";
 import OAuth from "./components/OAuth";
 import { useSignUp } from "@clerk/clerk-expo";
+import { ReactNativeModal } from "react-native-modal";
 
 const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -16,7 +17,7 @@ const SignUp = () => {
     password: "",
   });
   const [verification, setVerification] = useState({
-    state: "default",
+    state: "success",
     error: "",
     code: "",
   });
@@ -133,7 +134,14 @@ const SignUp = () => {
           </Link>
         </View>
 
-        {/* Verification Modal*/}
+        <ReactNativeModal isVisible={verification.state === "success"}>
+          <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
+            <Image
+              source={images.check}
+              className="w-[110px] h-[110px] mx-auto my-5"
+            />
+          </View>
+        </ReactNativeModal>
       </View>
     </ScrollView>
   );
