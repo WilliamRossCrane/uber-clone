@@ -10,6 +10,7 @@ import Modal from "react-native-modal";
 
 const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -136,15 +137,24 @@ const SignUp = () => {
         </View>
 
         {/* Verification Code Modal */}
-        <Modal isVisible={verification.state === "pending"}>
+        <Modal
+          isVisible={verification.state === "pending"}
+          onBackdropPress={() =>
+            setVerification({ ...verification, state: "default" })
+          }
+          onModalHide={() => {
+            if (verification.state === "success") {
+              setShowSuccessModal(true);
+            }
+          }}
+        >
           <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
-            <Text className="text-2xl font-JakartaExtraBold mb-2">
+            <Text className="font-JakartaExtraBold text-2xl mb-2">
               Verification
             </Text>
             <Text className="font-Jakarta mb-5">
-              We've sent a verification code to {form.email}
+              We've sent a verification code to {form.email}.
             </Text>
-
             <InputField
               label="Code"
               icon={icons.lock}
@@ -155,13 +165,11 @@ const SignUp = () => {
                 setVerification({ ...verification, code })
               }
             />
-
             {verification.error && (
               <Text className="text-red-500 text-sm mt-1">
                 {verification.error}
               </Text>
             )}
-
             <CustomButton
               title="Verify Email"
               onPress={onPressVerify}
@@ -171,7 +179,7 @@ const SignUp = () => {
         </Modal>
 
         {/* Success Modal */}
-        <Modal isVisible={verification.state === "success"}>
+        <Modal isVisible={showSuccessModal}>
           <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
             <Image
               source={images.check}
