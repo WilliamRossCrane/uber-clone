@@ -7,11 +7,9 @@ import CustomButton from "./components/CustomButton";
 import OAuth from "./components/OAuth";
 import { useSignUp } from "@clerk/clerk-expo";
 import Modal from "react-native-modal";
-import { fetchAPI } from "@/lib/fetch";
 
 const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -51,14 +49,8 @@ const SignUp = () => {
       });
 
       if (completeSignUp.status === "complete") {
-        await fetchAPI("/(api)/user", {
-          method: "POST",
-          body: JSON.stringify({
-            name: form.name,
-            email: form.email,
-            clerkId: completeSignUp.createdUserId,
-          }),
-        });
+        // TODO: Create a database user!
+
         await setActive({ session: completeSignUp.createdSessionId });
         setVerification({ ...verification, state: "success" });
       } else {
@@ -144,24 +136,15 @@ const SignUp = () => {
         </View>
 
         {/* Verification Code Modal */}
-        <Modal
-          isVisible={verification.state === "pending"}
-          onBackdropPress={() =>
-            setVerification({ ...verification, state: "default" })
-          }
-          onModalHide={() => {
-            if (verification.state === "success") {
-              setShowSuccessModal(true);
-            }
-          }}
-        >
+        <Modal isVisible={verification.state === "pending"}>
           <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
-            <Text className="font-JakartaExtraBold text-2xl mb-2">
+            <Text className="text-2xl font-JakartaExtraBold mb-2">
               Verification
             </Text>
             <Text className="font-Jakarta mb-5">
-              We've sent a verification code to {form.email}.
+              We've sent a verification code to {form.email}
             </Text>
+
             <InputField
               label="Code"
               icon={icons.lock}
@@ -172,11 +155,13 @@ const SignUp = () => {
                 setVerification({ ...verification, code })
               }
             />
+
             {verification.error && (
               <Text className="text-red-500 text-sm mt-1">
                 {verification.error}
               </Text>
             )}
+
             <CustomButton
               title="Verify Email"
               onPress={onPressVerify}
@@ -186,7 +171,7 @@ const SignUp = () => {
         </Modal>
 
         {/* Success Modal */}
-        <Modal isVisible={showSuccessModal}>
+        <Modal isVisible={verification.state === "success"}>
           <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
             <Image
               source={images.check}
@@ -203,10 +188,7 @@ const SignUp = () => {
 
             <CustomButton
               title="Browse Home"
-              onPress={() => {
-                setShowSuccessModal(false);
-                router.replace("/(root)/(tabs)/home");
-              }}
+              onPress={() => router.replace("/(root)/(tabs)/home")}
               className="mt-5"
             />
           </View>
