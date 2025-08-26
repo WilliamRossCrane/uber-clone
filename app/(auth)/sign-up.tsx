@@ -188,7 +188,11 @@ const SignUp = () => {
 
             <CustomButton
               title="Browse Home"
-              onPress={() => router.replace("/(root)/(tabs)/home")}
+              onPress={() => {
+              setShowSuccessModal(value: false);
+              onPress={() => router.push("/(root)/(tabs)/home")
+              }
+            }
               className="mt-5"
             />
           </View>
