@@ -16,6 +16,7 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+
   const [verification, setVerification] = useState({
     state: "default",
     error: "",
@@ -50,7 +51,6 @@ const SignUp = () => {
 
       if (completeSignUp.status === "complete") {
         // TODO: Create a database user!
-
         await setActive({ session: completeSignUp.createdSessionId });
         setVerification({ ...verification, state: "success" });
       } else {
@@ -189,10 +189,8 @@ const SignUp = () => {
             <CustomButton
               title="Browse Home"
               onPress={() => {
-              setShowSuccessModal(value: false);
-              onPress={() => router.push("/(root)/(tabs)/home")
-              }
-            }
+                router.push("/(root)/(tabs)/home");
+              }}
               className="mt-5"
             />
           </View>

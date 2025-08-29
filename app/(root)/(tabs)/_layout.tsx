@@ -1,41 +1,53 @@
 import { Tabs } from "expo-router";
 import { View, Image, ImageSourcePropType } from "react-native";
-
 import { icons } from "@/app/constants";
 
-const TabIcon = ({ source, focused }: { source: ImageSourcePropType; focused: boolean }) => (
-  <View className={`flex flex-row justify-center items-center rounded-full ${focused ? "bg-general-300" : ""}`}>
-    <View className={`rounded-full w-12 h-12 items-center justify-center ${focused ? "bg-general-400" : ""}`}>
-      <Image
-        source={source}
-        resizeMode="contain"
-        style={{ tintColor: "white" }}
-        className="w-7 h-7"
-      />
+const TabIcon = ({
+  source,
+  focused,
+}: {
+  source: ImageSourcePropType;
+  focused: boolean;
+}) => {
+  return (
+    <View style={{ alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{
+          width: 56,
+          height: 56,
+          borderRadius: 28,
+          backgroundColor: focused ? "#22c55e" : "transparent",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          source={source}
+          resizeMode="contain"
+          style={{ width: 28, height: 28, tintColor: "white" }}
+        />
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const Layout = () => (
   <Tabs
-    initialRouteName="index"
+    initialRouteName="home"
     screenOptions={{
-      tabBarActiveTintColor: "white", 
+      tabBarActiveTintColor: "white",
       tabBarInactiveTintColor: "white",
       tabBarShowLabel: false,
       tabBarStyle: {
         backgroundColor: "#333333",
-        borderRadius: 50,
-        paddingBottom: 0, // iOS only
-        overflow: "hidden",
+        borderRadius: 40,
         marginHorizontal: 20,
-        marginBottom: 20,
-        height: 78,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
+        marginBottom: 30,
+        height: 73,
         position: "absolute",
+      },
+      tabBarItemStyle: {
+        marginTop: 10,
       },
     }}
   >
@@ -44,7 +56,11 @@ const Layout = () => (
       options={{
         title: "Home",
         headerShown: false,
-        tabBarIcon: ({ focused }) => <TabIcon source={icons.home} focused={focused} />,
+        tabBarIcon: ({ focused }) => (
+          <View style={{ top: 4 }}>
+            <TabIcon source={icons.home} focused={focused} />
+          </View>
+        ),
       }}
     />
     <Tabs.Screen
@@ -52,7 +68,11 @@ const Layout = () => (
       options={{
         title: "Ride",
         headerShown: false,
-        tabBarIcon: ({ focused }) => <TabIcon source={icons.list} focused={focused} />,
+        tabBarIcon: ({ focused }) => (
+          <View style={{ top: 4 }}>
+            <TabIcon source={icons.list} focused={focused} />
+          </View>
+        ),
       }}
     />
     <Tabs.Screen
@@ -60,7 +80,11 @@ const Layout = () => (
       options={{
         title: "Chat",
         headerShown: false,
-        tabBarIcon: ({ focused }) => <TabIcon source={icons.chat} focused={focused} />,
+        tabBarIcon: ({ focused }) => (
+          <View style={{ top: 4 }}>
+            <TabIcon source={icons.chat} focused={focused} />
+          </View>
+        ),
       }}
     />
     <Tabs.Screen
@@ -68,7 +92,11 @@ const Layout = () => (
       options={{
         title: "Profile",
         headerShown: false,
-        tabBarIcon: ({ focused }) => <TabIcon source={icons.profile} focused={focused} />,
+        tabBarIcon: ({ focused }) => (
+          <View style={{ top: 4 }}>
+            <TabIcon source={icons.profile} focused={focused} />
+          </View>
+        ),
       }}
     />
   </Tabs>
