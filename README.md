@@ -1,5 +1,9 @@
 # 🚕 Full Stack Uber Clone
 
+![Project Status](https://img.shields.io/badge/status-in%20progress-yellow)
+
+⚡ **Project Status:** Work in progress. Some features are implemented, others are under development.
+
 This project is a comprehensive **Uber Clone** mobile app built during the [JavaScript Mastery](https://jsmastery.pro/) course. It uses the latest features of **React Native**, **Expo**, **TypeScript**, and a lightning-fast **edge-ready Postgres database (NeonDB)**.
 
 Designed and taught by Adrian Hajdin of JavaScript Mastery, this build demonstrates how to architect a **scalable**, **responsive**, and **production-grade** application with advanced features like authentication, geolocation, payments, and state management.
@@ -16,6 +20,16 @@ Designed and taught by Adrian Hajdin of JavaScript Mastery, this build demonstra
 
 ---
 
+## 🐛 Bugs
+
+- **Splash Screen Not Working**  
+  The splash screen may not display correctly on some devices or emulators. This is currently under investigation.
+
+- **Success Modal Not Displayed During Authentication**  
+  After successful authentication, the expected success modal does not appear in certain scenarios. Users may be redirected without visual confirmation of success.
+
+---
+
 ## ⚙️ Tech Stack
 
 - **React Native (Expo)** – Frontend mobile development
@@ -27,15 +41,14 @@ Designed and taught by Adrian Hajdin of JavaScript Mastery, this build demonstra
 - **Google Maps API** – Location services and routing
 - **Google Places API** – Location autocomplete
 - **Clerk** – Authentication and user management
-- **WebStorm** – IDE used for optimal DX
 
 ---
 
 ## 🔋 Features
 
-👉 **Onboarding Flow** - Seamless user registration and setup process  
-👉 **Email Password Authentication with Verification**  
-👉 **oAuth Using Google**  
+👉 **Onboarding Flow** – Seamless user registration and setup process  
+👉 **Email & Password Authentication with Verification**  
+👉 **OAuth Using Google**  
 👉 **Authorization for User Roles**  
 👉 **Home Screen with Live Location & Google Map**  
 👉 **Recent Rides Overview**  
@@ -46,10 +59,7 @@ Designed and taught by Adrian Hajdin of JavaScript Mastery, this build demonstra
 👉 **Pay for Ride Using Stripe**  
 👉 **Ride Created After Successful Payment**  
 👉 **User Profile Management**  
-👉 **View Ride History**  
-👉 **Responsive on Android and iOS**
-
-And many more — including clean architecture, reusability, and modular code!
+👉 **View Ride History**
 
 ---
 
