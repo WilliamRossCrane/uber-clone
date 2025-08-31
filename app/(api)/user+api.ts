@@ -6,29 +6,30 @@ export async function POST(request: Request) {
     const { name, email, clerkId } = await request.json();
 
     if (!name || !email || !clerkId) {
-      return Response.json(
-        { error: "Missing required fields" },
-        { status: 400 }
+      return new Response(
+        JSON.stringify({ error: "Missing required fields" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
     const response = await sql`
-      INSERT INTO users (
-        name, 
-        email, 
-        clerk_id
-      ) 
-      VALUES (
-        ${name}, 
-        ${email},
-        ${clerkId}
-     );`;
+      INSERT INTO users (name, email, clerk_id)
+      VALUES (${name}, ${email}, ${clerkId})
+      RETURNING *;
+    `;
 
-    return new Response(JSON.stringify({ data: response }), {
+    return new Response(JSON.stringify({ data: response[0] }), {
       status: 201,
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     console.error("Error creating user:", error);
-    return Response.json({ error: "Internal Server Error" }, { status: 500 });
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }
