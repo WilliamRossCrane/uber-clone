@@ -131,17 +131,22 @@ export default function Page() {
 
   const [hasPermissions, setHasPermissions] = useState(false);
 
-  const handleSignOut = () => {signOut();};
+  const handleSignOut = () => {
+    signOut();
+  };
+
   const handleDestinationPress = () => {};
 
   useEffect(() => {
     const requestLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-    
+
       if (status !== "granted") {
-        setHasPermission(false);
+        setHasPermissions(false);
         return;
       }
+
+      setHasPermissions(true);
 
       let location = await Location.getCurrentPositionAsync({});
 
@@ -150,13 +155,15 @@ export default function Page() {
         longitude: location.coords?.longitude!,
       });
 
-       setUserLocation({
+      setUserLocation({
         latitude: location.coords?.latitude,
         longitude: location.coords?.longitude,
-        address: `${address[0].name}, ${address[0].region}`,
+        address: `${address[0]?.name}, ${address[0]?.region}`,
       });
+    };
+
     requestLocation();
-  }, [])
+  }, []);
 
   return (
     <SafeAreaView className="bg-general-500 flex-1">
