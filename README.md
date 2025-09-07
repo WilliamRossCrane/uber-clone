@@ -28,12 +28,6 @@ Designed and taught by Adrian Hajdin of JavaScript Mastery, this build demonstra
 - **Success Modal Not Displayed During Authentication**  
   After successful authentication, the expected success modal does not appear in certain scenarios. Users may be redirected without visual confirmation of success.
 
-- \*\*Icon Property Filter Error in GoogleTextInput Component
-  The icon prop is causing a 'Cannot read property filter of undefined' error when the component renders. This occurs when no icon is passed to the component, preventing proper initialization.
-
-- \*\*API Key Missing Warning Despite Correct Configuration
-  The search bar displays "API key is missing" warning even when the Google Places API key is properly loaded and configured. The component shows the fallback error state instead of the functional search input.
-
 ---
 
 ## ⚙️ Tech Stack

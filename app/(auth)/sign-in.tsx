@@ -1,15 +1,15 @@
 import { Alert, Text, ScrollView, View, Image } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { images, icons } from "../constants";
-import InputField from "./components/InputField";
+import InputField from "@/components/InputField";
 import { useCallback, useState } from "react";
-import CustomButton from "./components/CustomButton";
-import OAuth from "./components/OAuth";
+import CustomButton from "@/components/CustomButton";
+import OAuth from "@/components/OAuth";
 import { useSignIn } from "@clerk/clerk-expo";
 
 const SignIn = () => {
   const { signIn, setActive, isLoaded } = useSignIn();
-  const router = useRouter()
+  const router = useRouter();
 
   const [form, setForm] = useState({
     email: "",

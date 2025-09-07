@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import RideCard from "@/app/(auth)/components/RideCard";
+import RideCard from "@/components/RideCard";
 import { images, icons } from "@/app/constants";
-import GoogleTextInput from "@/app/(auth)/components/GoogleTextInput";
-import Map from "@/app/(auth)/components/Map";
+import GoogleTextInput from "@/components/GoogleTextInput";
+import Map from "@/components/Map";
 import { useLocationStore } from "@/store";
 import { useEffect, useState } from "react";
 
@@ -165,10 +165,14 @@ export default function Page() {
     requestLocation();
   }, []);
 
+  // ✅ Ensure recentRides is always an array
+  const ridesData = Array.isArray(recentRides) ? recentRides.slice(0, 5) : [];
+
   return (
     <SafeAreaView className="bg-general-500 flex-1">
       <FlatList
-        data={recentRides?.slice(0, 5)}
+        data={ridesData}
+        keyExtractor={(item) => item.ride_id}
         renderItem={({ item }) => <RideCard ride={item} />}
         className="px-5"
         keyboardShouldPersistTaps="handled"
@@ -189,6 +193,7 @@ export default function Page() {
             )}
           </View>
         )}
+        // ✅ Make ListHeaderComponent a function to prevent rendering issues
         ListHeaderComponent={() => (
           <View className="mb-5">
             <View className="flex flex-row items-center justify-between my-5">

@@ -4,7 +4,7 @@ import { router } from "expo-router";
 import Swiper from "react-native-swiper";
 import { useRef, useState } from "react";
 import { onboarding } from "../constants";
-import CustomButton from "./components/CustomButton";
+import CustomButton from "@/components/CustomButton";
 
 const { width, height } = Dimensions.get("window");
 

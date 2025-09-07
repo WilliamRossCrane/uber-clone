@@ -1,10 +1,10 @@
 import { Alert, Text, ScrollView, View, Image } from "react-native";
 import { Link, router } from "expo-router";
 import { images, icons } from "../constants";
-import InputField from "./components/InputField";
+import InputField from "@/components/InputField";
 import { useState } from "react";
-import CustomButton from "./components/CustomButton";
-import OAuth from "./components/OAuth";
+import CustomButton from "@/components/CustomButton";
+import OAuth from "@/components/OAuth";
 import { useSignUp } from "@clerk/clerk-expo";
 import Modal from "react-native-modal";
 import { fetchAPI } from "@/lib/fetch";
