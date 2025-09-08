@@ -50,7 +50,7 @@ const recentRides = [
     destination_address: "Pune, Maharashtra, India",
     origin_latitude: "18.609116",
     origin_longitude: "77.165873",
-    destination_latitude: "18.520430",
+    destination_latitude: "18.52043",
     destination_longitude: "73.856744",
     ride_time: 491,
     fare_price: "24500.00",
@@ -141,7 +141,12 @@ export default function Page() {
     longitude?: number;
     address?: string;
   }) => {
-    if (!location || !location.latitude || !location.longitude || !location.address) {
+    if (
+      !location ||
+      !location.latitude ||
+      !location.longitude ||
+      !location.address
+    ) {
       console.warn("handleDestinationPress: Invalid location", location);
       return;
     }
@@ -208,6 +213,7 @@ export default function Page() {
         )}
         ListHeaderComponent={() => (
           <View className="mb-5">
+            {/* Welcome + Sign out */}
             <View className="flex flex-row items-center justify-between my-5">
               <Text className="text-2xl font-JakartaExtraBold">
                 Welcome {isLoaded && user ? user.firstName : "..."} 👋
@@ -220,13 +226,31 @@ export default function Page() {
               </TouchableOpacity>
             </View>
 
+            {/* Search box */}
             <GoogleTextInput
               icon={icons.search}
               containerStyle="bg-white shadow-md shadow-neutral-300"
               handlePress={handleDestinationPress}
             />
 
-            <Text className="text-xl font-JakartaBold mt-5 mb-3">
+            {/* Current location */}
+            <Text className="text-xl font-JakartaBold mt-5 mb-4">
               Your current location
             </Text>
-            <View className="flex flex-row items-center bg-transparent h-[300
+            <View
+              className="flex flex-row items-center bg-transparent"
+              style={{ height: 300 }}
+            >
+              <Map />
+            </View>
+
+            {/* Recent rides heading */}
+            <Text className="text-xl font-JakartaBold mt-6 mb-0">
+              Recent Rides
+            </Text>
+          </View>
+        )}
+      />
+    </SafeAreaView>
+  );
+}
