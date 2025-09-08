@@ -1,4 +1,5 @@
 import { useUser, useClerk } from "@clerk/clerk-expo";
+import { router } from "expo-router";
 import * as Location from "expo-location";
 import {
   FlatList,
@@ -135,7 +136,20 @@ export default function Page() {
     signOut();
   };
 
-  const handleDestinationPress = () => {};
+  const handleDestinationPress = (location: {
+    latitude?: number;
+    longitude?: number;
+    address?: string;
+  }) => {
+    if (!location || !location.latitude || !location.longitude || !location.address) {
+      console.warn("handleDestinationPress: Invalid location", location);
+      return;
+    }
+
+    console.log("Navigating to find-ride with location:", location);
+    setDestinationLocation(location);
+    router.push("/(root)/find-ride");
+  };
 
   useEffect(() => {
     const requestLocation = async () => {
@@ -151,13 +165,13 @@ export default function Page() {
       let location = await Location.getCurrentPositionAsync({});
 
       const address = await Location.reverseGeocodeAsync({
-        latitude: location.coords?.latitude!,
-        longitude: location.coords?.longitude!,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
       });
 
       setUserLocation({
-        latitude: location.coords?.latitude,
-        longitude: location.coords?.longitude,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
         address: `${address[0]?.name}, ${address[0]?.region}`,
       });
     };
@@ -165,7 +179,6 @@ export default function Page() {
     requestLocation();
   }, []);
 
-  // ✅ Ensure recentRides is always an array
   const ridesData = Array.isArray(recentRides) ? recentRides.slice(0, 5) : [];
 
   return (
@@ -193,7 +206,6 @@ export default function Page() {
             )}
           </View>
         )}
-        // ✅ Make ListHeaderComponent a function to prevent rendering issues
         ListHeaderComponent={() => (
           <View className="mb-5">
             <View className="flex flex-row items-center justify-between my-5">
@@ -217,16 +229,4 @@ export default function Page() {
             <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Your current location
             </Text>
-            <View className="flex flex-row items-center bg-transparent h-[300px]">
-              <Map />
-            </View>
-
-            <Text className="text-xl font-JakartaBold mt-5 mb-3">
-              Recent Rides
-            </Text>
-          </View>
-        )}
-      />
-    </SafeAreaView>
-  );
-}
+            <View className="flex flex-row items-center bg-transparent h-[300
