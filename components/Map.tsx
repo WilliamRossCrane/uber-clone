@@ -1,12 +1,15 @@
-import { Text, View } from "react-native";
+// app/(root)/map.tsx
+import { useEffect, useState } from "react";
+import { View } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+
 import { useDriverStore, useLocationStore } from "@/store";
 import { calculateRegion, generateMarkersFromData } from "@/lib/map";
-import { useEffect, useState } from "react";
 import { MarkerData } from "@/types/type";
 import { icons } from "@/app/constants";
 
-const drivers = [
+// Mock driver data (could come from API later)
+const localDrivers = [
   {
     id: "1",
     first_name: "James",
@@ -61,7 +64,8 @@ const Map = () => {
     destinationLongitude,
   } = useLocationStore();
 
-  const { selectedDriver, setDrivers } = useDriverStore;
+  const { drivers, setDrivers, selectedDriver } = useDriverStore();
+
   const [markers, setMarkers] = useState<MarkerData[]>([]);
 
   const region = calculateRegion({
@@ -72,21 +76,21 @@ const Map = () => {
   });
 
   useEffect(() => {
-    //TO DO
-    setDrivers(drivers);
-    
-    if (Array.isArray(drivers)) {
+    // push local driver data into store
+    setDrivers(localDrivers);
+
+    if (Array.isArray(localDrivers)) {
       if (!userLatitude || !userLongitude) return;
 
       const newMarkers = generateMarkersFromData({
-        data: drivers,
+        data: localDrivers,
         userLatitude,
         userLongitude,
       });
 
       setMarkers(newMarkers);
     }
-  }, [drivers, userLatitude, userLongitude]);
+  }, [userLatitude, userLongitude]);
 
   return (
     <MapView
@@ -99,7 +103,7 @@ const Map = () => {
       showsUserLocation={true}
       userInterfaceStyle="light"
     >
-      {markers.map((marker, index) => (
+      {markers.map((marker) => (
         <Marker
           key={marker.id}
           coordinate={{
