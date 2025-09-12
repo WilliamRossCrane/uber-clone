@@ -13,10 +13,12 @@ const ConfirmRide = () => {
     <RideLayout title="Choose a Driver" snapPoints={["65%", "85%"]}>
       <FlatList
         data={drivers}
+        keyExtractor={(item) => String(item.id)}
+        extraData={selectedDriver} // <- ensures FlatList re-renders when selection changes
         renderItem={({ item }) => (
           <DriverCard
-            selected={selectedDriver}
-            setSelected={() => setSelectedDriver(item.id)} // keep type consistent
+            selected={selectedDriver} // keep numeric selected in store
+            setSelected={() => setSelectedDriver(Number(item.id))} // keep Number(...)
             item={item}
           />
         )}

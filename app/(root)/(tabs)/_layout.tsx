@@ -16,7 +16,7 @@ const TabIcon = ({
           width: 56,
           height: 56,
           borderRadius: 28,
-          backgroundColor: focused ? "#22c55e" : "transparent",
+          backgroundColor: focused ? "#3B82F6" : "transparent",
           alignItems: "center",
           justifyContent: "center",
         }}

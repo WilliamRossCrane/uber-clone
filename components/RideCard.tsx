@@ -66,10 +66,11 @@ const RideCard = ({ ride }: { ride: Ride }) => {
               Payment Status
             </Text>
             <Text
+              style={{
+                color: ride.payment_status === "paid" ? "#3B82F6" : undefined,
+              }}
               className={`text-md capitalize font-JakartaBold ${
-                ride.payment_status === "paid"
-                  ? "text-green-500"
-                  : "text-red-500"
+                ride.payment_status !== "paid" ? "text-red-500" : ""
               }`}
             >
               {ride.payment_status}

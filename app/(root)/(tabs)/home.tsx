@@ -132,43 +132,31 @@ export default function Page() {
 
   const [hasPermissions, setHasPermissions] = useState(false);
 
-  const handleSignOut = () => {
-    signOut();
-  };
+  const handleSignOut = () => signOut();
 
   const handleDestinationPress = (location: {
     latitude?: number;
     longitude?: number;
     address?: string;
   }) => {
-    if (
-      !location ||
-      !location.latitude ||
-      !location.longitude ||
-      !location.address
-    ) {
-      console.warn("handleDestinationPress: Invalid location", location);
+    if (!location?.latitude || !location?.longitude || !location?.address) {
+      console.warn("Invalid location", location);
       return;
     }
-
-    console.log("Navigating to find-ride with location:", location);
     setDestinationLocation(location);
     router.push("/(root)/find-ride");
   };
 
   useEffect(() => {
     const requestLocation = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-
+      const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setHasPermissions(false);
         return;
       }
-
       setHasPermissions(true);
 
-      let location = await Location.getCurrentPositionAsync({});
-
+      const location = await Location.getCurrentPositionAsync({});
       const address = await Location.reverseGeocodeAsync({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -180,7 +168,6 @@ export default function Page() {
         address: `${address[0]?.name}, ${address[0]?.region}`,
       });
     };
-
     requestLocation();
   }, []);
 
@@ -238,7 +225,7 @@ export default function Page() {
               Your current location
             </Text>
             <View
-              className="flex flex-row items-center bg-transparent"
+              className="flex flex-row items-center bg-transparent rounded-2xl overflow-hidden"
               style={{ height: 300 }}
             >
               <Map />

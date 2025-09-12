@@ -6,7 +6,10 @@ import { formatTime } from "@/lib/utils";
 import { DriverCardProps } from "@/types/type";
 
 const DriverCard = ({ item, selected, setSelected }: DriverCardProps) => {
-  const isSelected = selected === item.id;
+  const isSelected =
+    typeof selected === "boolean"
+      ? selected
+      : Number(selected) === Number(item.id);
 
   return (
     <TouchableOpacity
@@ -23,8 +26,10 @@ const DriverCard = ({ item, selected, setSelected }: DriverCardProps) => {
       <View className="flex-1 flex flex-col items-start justify-center mx-3">
         <View className="flex flex-row items-center justify-start mb-1">
           <Text
-            className={`text-lg font-JakartaRegular ${
-              isSelected ? "text-white" : "text-black"
+            className={`text-lg ${
+              isSelected
+                ? "font-JakartaBold text-black"
+                : "font-JakartaRegular text-black"
             }`}
           >
             {item.title}
@@ -33,8 +38,10 @@ const DriverCard = ({ item, selected, setSelected }: DriverCardProps) => {
           <View className="flex flex-row items-center space-x-1 ml-2">
             <Image source={icons.star} className="w-3.5 h-3.5" />
             <Text
-              className={`text-sm font-JakartaRegular ${
-                isSelected ? "text-white" : "text-black"
+              className={`text-sm ${
+                isSelected
+                  ? "font-JakartaBold text-black"
+                  : "font-JakartaRegular text-black"
               }`}
             >
               4
@@ -46,41 +53,39 @@ const DriverCard = ({ item, selected, setSelected }: DriverCardProps) => {
           <View className="flex flex-row items-center">
             <Image source={icons.dollar} className="w-4 h-4" />
             <Text
-              className={`text-sm font-JakartaRegular ml-1 ${
-                isSelected ? "text-white" : "text-black"
+              className={`text-sm ml-1 ${
+                isSelected
+                  ? "font-JakartaBold text-black"
+                  : "font-JakartaRegular text-black"
               }`}
             >
               ${item.price}
             </Text>
           </View>
 
-          <Text
-            className={`text-sm font-JakartaRegular mx-1 ${
-              isSelected ? "text-white" : "text-general-800"
-            }`}
-          >
+          <Text className="text-sm font-JakartaRegular mx-1 text-general-800">
             |
           </Text>
 
           <Text
-            className={`text-sm font-JakartaRegular ${
-              isSelected ? "text-white" : "text-general-800"
+            className={`text-sm ${
+              isSelected
+                ? "font-JakartaBold text-black"
+                : "font-JakartaRegular text-general-800"
             }`}
           >
             {formatTime(item.time!)}
           </Text>
 
-          <Text
-            className={`text-sm font-JakartaRegular mx-1 ${
-              isSelected ? "text-white" : "text-general-800"
-            }`}
-          >
+          <Text className="text-sm font-JakartaRegular mx-1 text-general-800">
             |
           </Text>
 
           <Text
-            className={`text-sm font-JakartaRegular ${
-              isSelected ? "text-white" : "text-general-800"
+            className={`text-sm ${
+              isSelected
+                ? "font-JakartaBold text-black"
+                : "font-JakartaRegular text-general-800"
             }`}
           >
             {item.car_seats} seats
