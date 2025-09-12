@@ -20,11 +20,14 @@ const RideLayout = ({
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const isDriverList = title === "Choose a Driver"; // 👈 you can refine this condition if needed
+  const isDriverList = title === "Choose a Driver";
 
   return (
     <GestureHandlerRootView className="flex-1 bg-white">
-      <View className="flex flex-col h-screen bg-blue-500">
+      <View className="flex-1">
+        {/* Map */}
+        <Map className="flex-1" />
+
         {/* Header */}
         <View className="flex flex-row absolute z-10 top-16 items-center justify-start px-5">
           <TouchableOpacity
@@ -43,21 +46,23 @@ const RideLayout = ({
           </Text>
         </View>
 
-        {/* Map */}
-        <Map />
-
         {/* Bottom Sheet */}
         <BottomSheet
           ref={bottomSheetRef}
-          snapPoints={snapPoints || ["40%", "85%"]}
+          snapPoints={snapPoints || ["45%", "85%"]}
           index={0}
         >
           {isDriverList ? (
-            <BottomSheetView style={{ flex: 1, padding: 20 }}>
+            <BottomSheetView
+              style={{ flex: 1, paddingHorizontal: 20, paddingBottom: 40 }}
+            >
               {children}
             </BottomSheetView>
           ) : (
-            <BottomSheetScrollView style={{ flex: 1, padding: 20 }}>
+            <BottomSheetScrollView
+              style={{ flex: 1, paddingHorizontal: 20 }}
+              contentContainerStyle={{ paddingBottom: 100 }}
+            >
               {children}
             </BottomSheetScrollView>
           )}

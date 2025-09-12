@@ -16,10 +16,14 @@ const ConfirmRide = () => {
         renderItem={({ item }) => (
           <DriverCard
             selected={selectedDriver}
-            setSelected={() => setSelectedDriver(Number(item.id)!)}
+            setSelected={() => setSelectedDriver(item.id)} // keep type consistent
             item={item}
           />
         )}
+        contentContainerStyle={{
+          backgroundColor: "white",
+          paddingBottom: 40,
+        }}
         ListFooterComponent={() => (
           <View className="mx-5 mt-10">
             <CustomButton
