@@ -9,26 +9,19 @@ export async function POST(request: Request) {
   if (!name || !email || !amount) {
     return new Response(
       JSON.stringify({
-        error: "Please enter a valid email address",
+        error: "Please enter a valid email address and amount",
       }),
-      {
-        status: 400,
-      }
+      { status: 400 }
     );
   }
 
   let customer;
-  const doesCustomerExist = await stripe.customers.list({ email });
+  const existingCustomers = await stripe.customers.list({ email });
 
-  if (doesCustomerExist.data.length > 0) {
-    customer = doesCustomerExist.data[0];
+  if (existingCustomers.data.length > 0) {
+    customer = existingCustomers.data[0];
   } else {
-    const newCustomer = await stripe.customers.create({
-      name,
-      email,
-    });
-
-    customer = newCustomer;
+    customer = await stripe.customers.create({ name, email });
   }
 
   const ephemeralKey = await stripe.ephemeralKeys.create(
@@ -37,20 +30,13 @@ export async function POST(request: Request) {
   );
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: parseInt(amount) * 100,
-    currency: "aud",
+    amount: Math.round(parseFloat(amount) * 100), // convert to cents
+    currency: "usd", // always USD
     customer: customer.id,
-    automatic_payment_methods: {
-      enabled: true,
-      allow_redirects: "never",
-    },
+    automatic_payment_methods: { enabled: true, allow_redirects: "never" },
   });
 
   return new Response(
-    JSON.stringify({
-      paymentIntent,
-      ephemeralKey,
-      customer: customer.id,
-    })
+    JSON.stringify({ paymentIntent, ephemeralKey, customer: customer.id })
   );
 }
