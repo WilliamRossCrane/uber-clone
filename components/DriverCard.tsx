@@ -74,7 +74,7 @@ const DriverCard = ({ item, selected, setSelected }: DriverCardProps) => {
                 : "font-JakartaRegular text-general-800"
             }`}
           >
-            {formatTime(item.time!)}
+            {formatTime(String(item.time ?? "5"))}
           </Text>
 
           <Text className="text-sm font-JakartaRegular mx-1 text-general-800">

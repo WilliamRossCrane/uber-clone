@@ -6,26 +6,39 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Constants from "expo-constants";
 
 import { icons } from "@/app/constants";
-import { GoogleInputProps } from "@/types/type";
-
-const geoapifyKey = Constants.expoConfig?.extra?.EXPO_PUBLIC_GEOAPIFY_API_KEY;
 
 interface Suggestion {
   place_id: string;
-  formatted: string;
+  description: string;
   lat: number;
-  lon: number;
+  lng: number;
 }
+
+interface GoogleInputProps {
+  icon?: any;
+  initialLocation?: string;
+  containerStyle?: StyleProp<ViewStyle>;
+  textInputBackgroundColor?: string;
+  handlePress: (data: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  }) => void;
+}
+
+const googleKey = Constants.expoConfig?.extra?.EXPO_PUBLIC_GOOGLE_API_KEY;
 
 const GoogleTextInput = ({
   icon,
   initialLocation,
-  containerStyle = "",
+  containerStyle,
   textInputBackgroundColor = "white",
   handlePress,
 }: GoogleInputProps) => {
@@ -33,58 +46,65 @@ const GoogleTextInput = ({
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  useEffect(() => {
-    if (!geoapifyKey) {
-      console.warn(
-        "Geoapify API key is missing! Check .env and app.config.js."
-      );
-    }
-  }, []);
-
+  // Debounce input
   useEffect(() => {
     if (!query) {
       setSuggestions([]);
       return;
     }
 
-    const fetchSuggestions = async () => {
-      try {
-        const res = await fetch(
-          `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
-            query
-          )}&limit=5&apiKey=${geoapifyKey}`
-        );
-        const data = await res.json();
+    const timeout = setTimeout(() => {
+      fetchSuggestions(query);
+    }, 300);
 
-        if (!data.features || !Array.isArray(data.features)) {
-          setSuggestions([]);
-          return;
-        }
-
-        const places: Suggestion[] = data.features.map((f: any) => ({
-          place_id: f.properties.place_id,
-          formatted: f.properties.formatted,
-          lat: f.properties.lat,
-          lon: f.properties.lon,
-        }));
-
-        setSuggestions(places);
-      } catch (e) {
-        console.error("Geoapify autocomplete error:", e);
-      }
-    };
-
-    fetchSuggestions();
+    return () => clearTimeout(timeout);
   }, [query]);
 
+  const fetchSuggestions = async (input: string) => {
+    if (!googleKey) {
+      console.warn("Google API key missing!");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+          input
+        )}&key=${googleKey}&components=country:au&types=geocode`
+      );
+      const data = await res.json();
+
+      if (!data.predictions || !Array.isArray(data.predictions)) return;
+
+      const places: Suggestion[] = await Promise.all(
+        data.predictions.map(async (p: any) => {
+          const detailsRes = await fetch(
+            `https://maps.googleapis.com/maps/api/place/details/json?place_id=${p.place_id}&key=${googleKey}`
+          );
+          const detailsData = await detailsRes.json();
+          return {
+            place_id: p.place_id,
+            description: p.description,
+            lat: detailsData.result.geometry.location.lat,
+            lng: detailsData.result.geometry.location.lng,
+          };
+        })
+      );
+
+      setSuggestions(places);
+    } catch (e) {
+      console.error("Google Places autocomplete error:", e);
+    }
+  };
+
   const onSelect = (item: Suggestion) => {
-    setQuery(item.formatted);
+    setQuery(item.description);
     setSuggestions([]);
     setShowDropdown(false);
     handlePress({
       latitude: item.lat,
-      longitude: item.lon,
-      address: item.formatted,
+      longitude: item.lng,
+      address: item.description,
     });
   };
 
@@ -94,9 +114,10 @@ const GoogleTextInput = ({
         style={[
           styles.inputContainer,
           { backgroundColor: textInputBackgroundColor },
+          containerStyle && StyleSheet.flatten(containerStyle),
         ]}
       >
-        <Image source={icon ? icon : icons.search} style={styles.icon} />
+        <Image source={icon ?? icons.search} style={styles.icon} />
         <TextInput
           value={query}
           onChangeText={(text) => {
@@ -127,7 +148,7 @@ const GoogleTextInput = ({
                 activeOpacity={0.7}
               >
                 <Image source={icons.search} style={styles.suggestionIcon} />
-                <Text style={styles.suggestionText}>{item.formatted}</Text>
+                <Text style={styles.suggestionText}>{item.description}</Text>
               </TouchableOpacity>
             )}
           />
@@ -141,9 +162,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    height: 45,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    height: 50,
     zIndex: 10,
   },
   icon: {
@@ -159,7 +180,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: "absolute",
-    top: 50,
+    top: 55,
     width: "100%",
     backgroundColor: "white",
     borderRadius: 10,

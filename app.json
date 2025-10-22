@@ -7,9 +7,7 @@
     "icon": "./assets/images/splash.png",
     "scheme": "uberclone",
     "userInterfaceStyle": "automatic",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -41,7 +39,7 @@
     },
     "extra": {
       "EXPO_PUBLIC_GEOAPIFY_API_KEY": "09508cffb70d45658a94c8c9a5027928",
-      "EXPO_PUBLIC_GOOGLE_API_KEY": "AIzaSyC7ydcwQicIhilXwe_bax7Mn01J-BK9JGk",
+      "EXPO_PUBLIC_GOOGLE_API_KEY": "AIzaSyDZBXrtssA34yyaTDApj4jRZnBp7CcMJiA",
       "EXPO_PUBLIC_SERVER_URL": "https://uber.com"
     },
     "plugins": [
