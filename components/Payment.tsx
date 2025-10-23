@@ -109,7 +109,7 @@ const Payment = ({
   return (
     <>
       <CustomButton
-        title={`Pay $${safeAmount.toFixed(2)} USD`}
+        title={`Pay $${Number(amount ?? 10.99).toFixed(2)} USD`}
         className="my-10"
         onPress={openPaymentSheet}
       />
