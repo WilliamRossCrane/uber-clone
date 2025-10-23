@@ -12,7 +12,7 @@ import {
 import { useDriverStore, useLocationStore } from "@/store";
 import { MarkerData } from "@/types/type";
 
-const directionsAPI = process.env.EXPO_PUBLIC_DIRECTIONS_API_KEY;
+const directionsAPI = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
 // Local driver data
 const localDrivers = [
@@ -82,7 +82,6 @@ const Map = () => {
     destinationLongitude,
   });
 
-  // Generate markers and calculate driver ETAs
   useEffect(() => {
     if (!userLatitude || !userLongitude) return;
 
@@ -91,6 +90,7 @@ const Map = () => {
       userLatitude,
       userLongitude,
     });
+
     setMarkers(newMarkers);
 
     if (
@@ -114,12 +114,13 @@ const Map = () => {
     }
   }, [userLatitude, userLongitude, destinationLatitude, destinationLongitude]);
 
-  if (loading || (!userLatitude && !userLongitude))
+  if (loading || (!userLatitude && !userLongitude)) {
     return (
       <View className="flex justify-center items-center w-full h-40">
         <ActivityIndicator size="small" color="#000" />
       </View>
     );
+  }
 
   return (
     <MapView
@@ -157,14 +158,17 @@ const Map = () => {
             image={icons.pin}
           />
           <MapViewDirections
-            origin={{ latitude: userLatitude!, longitude: userLongitude! }}
+            origin={{
+              latitude: userLatitude!,
+              longitude: userLongitude!,
+            }}
             destination={{
               latitude: destinationLatitude,
               longitude: destinationLongitude,
             }}
             apikey={directionsAPI!}
-            strokeColor="#0286FF"
-            strokeWidth={2}
+            strokeColor="#0286ff"
+            strokeWidth={3}
           />
         </>
       )}
