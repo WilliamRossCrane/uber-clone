@@ -125,14 +125,18 @@ const recentRides = [
 ];
 
 export default function Page() {
-  const { setUserLocation, setDestinationLocation } = useLocationStore();
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
+  const { setUserLocation, setDestinationLocation } = useLocationStore();
+  
   const loading = true;
 
   const [hasPermissions, setHasPermissions] = useState(false);
 
-  const handleSignOut = () => signOut();
+  const handleSignOut = () => {
+    signOut();
+    router.replace("/(auth)/sign-in");
+  };
 
   const handleDestinationPress = (location: {
     latitude?: number;
