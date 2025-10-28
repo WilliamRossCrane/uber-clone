@@ -12,14 +12,14 @@ const Chat = () => {
           <Image
             source={images.message}
             alt="message"
-            className="w-full h-40"
+            className="w-[260px] h-[180px] -mt-10"
             resizeMode="contain"
           />
-          <Text className="text-3xl font-JakartaBold mt-3">
+          <Text className="text-2xl font-JakartaBold mt-3">
             No Messages Yet
           </Text>
-          <Text className="text-base mt-2 text-center px-7">
-            Start a conversation with your friends and family
+          <Text className="text-2 mt-2 text-center px-7">
+            Start a conversation with your driver to confirm pickup details.
           </Text>
         </View>
       </ScrollView>

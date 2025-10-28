@@ -15,6 +15,7 @@ const Onboarding = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {/* Skip Button */}
       <TouchableOpacity
         onPress={() => router.replace("/(auth)/sign-up")}
         className="w-full flex justify-end items-end p-5"
@@ -22,36 +23,48 @@ const Onboarding = () => {
         <Text className="text-black text-md font-JakartaBold">Skip</Text>
       </TouchableOpacity>
 
-      <Swiper
-        ref={swiperRef}
-        loop={false}
-        dot={
-          <View className="w-[32px] h-[4px] mx-1 bg-[#E2E8F0] rounded-full" />
-        }
-        activeDot={
-          <View className="w-[32px] h-[4px] mx-1 bg-[#0286FF] rounded-full" />
-        }
-        onIndexChanged={(index) => setActiveIndex(index)}
-      >
-        {onboarding.map((item) => (
-          <View key={item.id} className="flex items-center p-5 pt-2">
-            <Image
-              source={item.image}
-              className="w-[320px] h-[260px]"
-              resizeMode="contain"
-            />
-            <View className="flex flex-row items-center justify-center w-full mt-8">
-              <Text className="text-black text-2xl font-bold mx-10 text-center">
-                {item.title}
+      {/* Swiper Slides */}
+      <View className="flex-1">
+        <Swiper
+          ref={swiperRef}
+          loop={false}
+          dot={
+            <View className="w-[32px] h-[4px] mx-1 bg-[#E2E8F0] rounded-full" />
+          }
+          activeDot={
+            <View className="w-[32px] h-[4px] mx-1 bg-[#0286FF] rounded-full" />
+          }
+          onIndexChanged={(index) => setActiveIndex(index)}
+          containerStyle={{ flex: 1 }}
+        >
+          {onboarding.map((item) => (
+            <View
+              key={item.id}
+              className="flex-1 justify-center items-center p-5 pt-0"
+            >
+              <View className="w-full h-[280px] justify-center items-center -mt-12">
+                <Image
+                  source={item.image}
+                  className="w-[360px] h-[290px]"
+                  resizeMode="contain"
+                />
+              </View>
+
+              <View className="flex flex-row items-center justify-center w-full mt-8">
+                <Text className="text-black text-2xl font-bold mx-10 text-center">
+                  {item.title}
+                </Text>
+              </View>
+
+              <Text className="text-xs font-JakartaSemiBold text-center text-[#858585] mx-10 mt-3">
+                {item.description}
               </Text>
             </View>
-            <Text className="text-xs font-JakartaSemiBold text-center text-[#858585] mx-10 mt-3">
-              {item.description}
-            </Text>
-          </View>
-        ))}
-      </Swiper>
+          ))}
+        </Swiper>
+      </View>
 
+      {/* Button at bottom */}
       <View className="px-5 pb-5">
         <CustomButton
           title={isLastSlide ? "Get Started" : "Next"}
