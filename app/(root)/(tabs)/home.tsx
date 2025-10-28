@@ -1,4 +1,4 @@
-import { useUser, useClerk } from "@clerk/clerk-expo";
+import { useUser, useAuth } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import * as Location from "expo-location";
 import {
@@ -10,128 +10,27 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import RideCard from "@/components/RideCard";
-import { images, icons } from "@/app/constants";
-import GoogleTextInput from "@/components/GoogleTextInput";
-import Map from "@/components/Map";
-import { useLocationStore } from "@/store";
 import { useEffect, useState } from "react";
 
-const recentRides = [
-  {
-    ride_id: "1",
-    origin_address: "Kathmandu, Nepal",
-    destination_address: "Pokhara, Nepal",
-    origin_latitude: "27.717245",
-    origin_longitude: "85.323961",
-    destination_latitude: "28.209583",
-    destination_longitude: "83.985567",
-    ride_time: 391,
-    fare_price: "19500.00",
-    payment_status: "paid",
-    driver_id: 2,
-    user_id: "1",
-    created_at: "2024-08-12 05:19:20.620007",
-    driver: {
-      driver_id: "2",
-      first_name: "David",
-      last_name: "Brown",
-      profile_image_url:
-        "https://ucarecdn.com/6ea6d83d-ef1a-483f-9106-837a3a5b3f67/-/preview/1000x666/",
-      car_image_url:
-        "https://ucarecdn.com/a3872f80-c094-409c-82f8-c9ff38429327/-/preview/930x932/",
-      car_seats: 5,
-      rating: "4.60",
-    },
-  },
-  {
-    ride_id: "2",
-    origin_address: "Jalkot, MH",
-    destination_address: "Pune, Maharashtra, India",
-    origin_latitude: "18.609116",
-    origin_longitude: "77.165873",
-    destination_latitude: "18.52043",
-    destination_longitude: "73.856744",
-    ride_time: 491,
-    fare_price: "24500.00",
-    payment_status: "paid",
-    driver_id: 1,
-    user_id: "1",
-    created_at: "2024-08-12 06:12:17.683046",
-    driver: {
-      driver_id: "1",
-      first_name: "James",
-      last_name: "Wilson",
-      profile_image_url:
-        "https://ucarecdn.com/dae59f69-2c1f-48c3-a883-017bcf0f9950/-/preview/1000x666/",
-      car_image_url:
-        "https://ucarecdn.com/a2dc52b2-8bf7-4e49-9a36-3ffb5229ed02/-/preview/465x466/",
-      car_seats: 4,
-      rating: "4.80",
-    },
-  },
-  {
-    ride_id: "3",
-    origin_address: "Zagreb, Croatia",
-    destination_address: "Rijeka, Croatia",
-    origin_latitude: "45.815011",
-    origin_longitude: "15.981919",
-    destination_latitude: "45.327063",
-    destination_longitude: "14.442176",
-    ride_time: 124,
-    fare_price: "6200.00",
-    payment_status: "paid",
-    driver_id: 1,
-    user_id: "1",
-    created_at: "2024-08-12 08:49:01.809053",
-    driver: {
-      driver_id: "1",
-      first_name: "James",
-      last_name: "Wilson",
-      profile_image_url:
-        "https://ucarecdn.com/dae59f69-2c1f-48c3-a883-017bcf0f9950/-/preview/1000x666/",
-      car_image_url:
-        "https://ucarecdn.com/a2dc52b2-8bf7-4e49-9a36-3ffb5229ed02/-/preview/465x466/",
-      car_seats: 4,
-      rating: "4.80",
-    },
-  },
-  {
-    ride_id: "4",
-    origin_address: "Okayama, Japan",
-    destination_address: "Osaka, Japan",
-    origin_latitude: "34.655531",
-    origin_longitude: "133.919795",
-    destination_latitude: "34.693725",
-    destination_longitude: "135.502254",
-    ride_time: 159,
-    fare_price: "7900.00",
-    payment_status: "paid",
-    driver_id: 3,
-    user_id: "1",
-    created_at: "2024-08-12 18:43:54.297838",
-    driver: {
-      driver_id: "3",
-      first_name: "Michael",
-      last_name: "Johnson",
-      profile_image_url:
-        "https://ucarecdn.com/0330d85c-232e-4c30-bd04-e5e4d0e3d688/-/preview/826x822/",
-      car_image_url:
-        "https://ucarecdn.com/289764fb-55b6-4427-b1d1-f655987b4a14/-/preview/930x932/",
-      car_seats: 4,
-      rating: "4.70",
-    },
-  },
-];
+import GoogleTextInput from "@/components/GoogleTextInput";
+import Map from "@/components/Map";
+import RideCard from "@/components/RideCard";
+import { icons, images } from "@/app/constants";
+import { useFetch } from "@/lib/fetch";
+import { useLocationStore } from "@/store";
+import { Ride } from "@/types/type";
 
-export default function Page() {
-  const { user, isLoaded } = useUser();
-  const { signOut } = useClerk();
+export default function Home() {
+  const { user } = useUser();
+  const { signOut } = useAuth();
   const { setUserLocation, setDestinationLocation } = useLocationStore();
-  
-  const loading = true;
 
-  const [hasPermissions, setHasPermissions] = useState(false);
+  const [hasPermission, setHasPermission] = useState(false);
+
+  // Fetch recent rides from API
+  const { data: recentRides, loading } = useFetch<Ride[]>(
+    `/(api)/ride/${user?.id}`
+  );
 
   const handleSignOut = () => {
     signOut();
@@ -139,26 +38,23 @@ export default function Page() {
   };
 
   const handleDestinationPress = (location: {
-    latitude?: number;
-    longitude?: number;
-    address?: string;
+    latitude: number;
+    longitude: number;
+    address: string;
   }) => {
-    if (!location?.latitude || !location?.longitude || !location?.address) {
-      console.warn("Invalid location", location);
-      return;
-    }
     setDestinationLocation(location);
     router.push("/(root)/find-ride");
   };
 
   useEffect(() => {
-    const requestLocation = async () => {
+    (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        setHasPermissions(false);
+        setHasPermission(false);
         return;
       }
-      setHasPermissions(true);
+
+      setHasPermission(true);
 
       const location = await Location.getCurrentPositionAsync({});
       const address = await Location.reverseGeocodeAsync({
@@ -171,24 +67,21 @@ export default function Page() {
         longitude: location.coords.longitude,
         address: `${address[0]?.name}, ${address[0]?.region}`,
       });
-    };
-    requestLocation();
+    })();
   }, []);
-
-  const ridesData = Array.isArray(recentRides) ? recentRides.slice(0, 5) : [];
 
   return (
     <SafeAreaView className="bg-general-500 flex-1">
       <FlatList
-        data={ridesData}
-        keyExtractor={(item) => item.ride_id}
+        data={recentRides?.slice(0, 5)}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => <RideCard ride={item} />}
         className="px-5"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ paddingBottom: 100, flexGrow: 1 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
         ListEmptyComponent={() => (
           <View className="flex flex-col items-center justify-center flex-1">
-            {loading ? (
+            {!loading ? (
               <>
                 <Image
                   source={images.noResult}
@@ -202,12 +95,12 @@ export default function Page() {
             )}
           </View>
         )}
-        ListHeaderComponent={() => (
-          <View className="mb-5">
+        ListHeaderComponent={
+          <>
             {/* Welcome + Sign out */}
             <View className="flex flex-row items-center justify-between my-5">
               <Text className="text-2xl font-JakartaExtraBold">
-                Welcome {isLoaded && user ? user.firstName : "..."} 👋
+                Welcome {user?.firstName} 👋
               </Text>
               <TouchableOpacity
                 onPress={handleSignOut}
@@ -225,22 +118,19 @@ export default function Page() {
             />
 
             {/* Current location */}
-            <Text className="text-xl font-JakartaBold mt-5 mb-4">
+            <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Your current location
             </Text>
-            <View
-              className="flex flex-row items-center bg-transparent rounded-2xl overflow-hidden"
-              style={{ height: 300 }}
-            >
+            <View className="flex flex-row items-center bg-transparent h-[300px]">
               <Map />
             </View>
 
             {/* Recent rides heading */}
-            <Text className="text-xl font-JakartaBold mt-6 mb-0">
+            <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Recent Rides
             </Text>
-          </View>
-        )}
+          </>
+        }
       />
     </SafeAreaView>
   );
