@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 
@@ -14,7 +14,7 @@ import { MarkerData } from "@/types/type";
 
 const directionsAPI = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
-// Local driver data
+// Fallback local drivers
 const localDrivers = [
   {
     id: "1",
@@ -85,30 +85,34 @@ const Map = () => {
   useEffect(() => {
     if (!userLatitude || !userLongitude) return;
 
+    // ✅ Safety check — prevent undefined data
+    const safeDrivers = Array.isArray(drivers) ? drivers : [];
+
     const newMarkers = generateMarkersFromData({
-      data: drivers,
+      data: safeDrivers,
       userLatitude,
       userLongitude,
     });
 
     setMarkers(newMarkers);
 
-    if (
-      newMarkers.length > 0 &&
-      destinationLatitude !== undefined &&
-      destinationLongitude !== undefined
-    ) {
+    // ✅ Only calculate times when destination is defined
+    if (newMarkers.length > 0 && destinationLatitude && destinationLongitude) {
       calculateDriverTimes({
         markers: newMarkers,
         userLatitude,
         userLongitude,
         destinationLatitude,
         destinationLongitude,
-      }).then((updatedDrivers) => {
-        setDrivers(updatedDrivers as MarkerData[]);
-        setLocalDrivers(updatedDrivers as any);
-        setLoading(false);
-      });
+      })
+        .then((updatedDrivers) => {
+          if (updatedDrivers && Array.isArray(updatedDrivers)) {
+            setDrivers(updatedDrivers);
+            setLocalDrivers(updatedDrivers);
+          }
+        })
+        .catch((err) => console.error("Driver time calculation error:", err))
+        .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
