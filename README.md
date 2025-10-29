@@ -1,8 +1,6 @@
 # 🚕 Full Stack Uber Clone
 
-![Project Status](https://img.shields.io/badge/status-in%20progress-yellow)
-
-⚡ **Project Status:** Work in progress. Some features are implemented, others are under development.
+⚡ ![Project Status](https://img.shields.io/badge/status-in%20progress-yellow) Two errors need amending and then initial development will finalise. 
 
 This project is a comprehensive **Uber Clone** mobile app built during the [JavaScript Mastery](https://jsmastery.pro/) course. It uses the latest features of **React Native**, **Expo**, **TypeScript**, and a lightning-fast **edge-ready Postgres database (NeonDB)**.
 
@@ -25,8 +23,8 @@ Designed and taught by Adrian Hajdin of JavaScript Mastery, this build demonstra
 - **Splash Screen Not Working**  
   The splash screen may not display correctly on some devices or emulators. This is currently under investigation.
 
-- **Success Modal Not Displayed During Authentication**  
-  After successful authentication, the expected success modal does not appear in certain scenarios. Users may be redirected without visual confirmation of success.
+- **API Parse Error**  
+  Every API has trouble Pushing and Getting information due to a back in the environment or server configuration it results in data being parsed incorrectly. 
 
 ---
 
