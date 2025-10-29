@@ -1,6 +1,6 @@
 # 🚕 Full Stack Uber Clone
 
-⚡ ![Project Status](https://img.shields.io/badge/status-in%20progress-yellow) Two errors need amending and then initial development will finalise. 
+![Project Status](https://img.shields.io/badge/status-in%20progress-yellow) Two errors need amending and then initial development will finalise. 
 
 This project is a comprehensive **Uber Clone** mobile app built during the [JavaScript Mastery](https://jsmastery.pro/) course. It uses the latest features of **React Native**, **Expo**, **TypeScript**, and a lightning-fast **edge-ready Postgres database (NeonDB)**.
 
@@ -44,13 +44,11 @@ Designed and taught by Adrian Hajdin of JavaScript Mastery, this build demonstra
 
 ## 🔋 Features
 
-👉 **Onboarding Flow** – Seamless user registration and setup process  
+👉 **Onboarding Flow**  
 👉 **Email & Password Authentication with Verification**  
-👉 **OAuth Using Google**  
-👉 **Authorization for User Roles**  
+👉 **OAuth Using Google**   
 👉 **Home Screen with Live Location & Google Map**  
 👉 **Recent Rides Overview**  
-👉 **Google Places Autocomplete**  
 👉 **Find Rides by Location**  
 👉 **Select Rides from Nearby Cars on Map**  
 👉 **Confirm Ride with Time and Price Details**  
@@ -68,16 +66,9 @@ Designed and taught by Adrian Hajdin of JavaScript Mastery, this build demonstra
 Make sure you have the following installed:
 
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/) (v14+)
+- [Node.js](https://nodejs.org/)
 - [npm](https://www.npmjs.com/)
 - [Expo CLI](https://docs.expo.dev/get-started/installation/)
-
-### 📁 Clone the Repository
-
-```bash
-git clone https://github.com/yourusername/uber-clone.git
-cd uber-clone
-```
 
 ### 📦 Install Dependencies
 
